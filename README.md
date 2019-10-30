@@ -62,3 +62,4 @@ All app preview screenshots were taken by running `ionic serve --lab` on a retin
 ### iOS
 
 1. Run `ionic cordova run ios --prod`
+# my-finance-app-ionic-all
