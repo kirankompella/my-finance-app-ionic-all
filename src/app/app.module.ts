@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { FormsModule } from '@angular/forms';
+import { Camera } from '@ionic-native/camera/ngx';
 
 @NgModule({
   imports: [
@@ -26,7 +27,7 @@ import { FormsModule } from '@angular/forms';
     })
   ],
   declarations: [AppComponent],
-  providers: [InAppBrowser, SplashScreen, StatusBar],
+  providers: [InAppBrowser, SplashScreen, StatusBar,Camera],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

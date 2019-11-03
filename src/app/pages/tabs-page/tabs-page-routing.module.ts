@@ -40,13 +40,14 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'map',
-        children: [
+        path: 'scanner',
+        children:[
           {
-            path: '',
-            loadChildren: () => import('../map/map.module').then(m => m.MapModule)
+           path: '',
+           loadChildren: () => import('../capture-card/capture-card.module').then(m => m.CaptureCardPageModule)
           }
         ]
+
       },
       {
         path: 'about',
