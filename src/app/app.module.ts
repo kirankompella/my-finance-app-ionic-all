@@ -13,9 +13,11 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { Camera } from '@ionic-native/camera/ngx';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   imports: [
+    HttpModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,

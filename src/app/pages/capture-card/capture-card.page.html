@@ -1,11 +1,23 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>capture-card</ion-title>
+    <ion-title>Scan Card</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-label>
-    <p>Just Capture card</p>
-  </ion-label>
+  <ion-grid >
+    <ion-row style="height: 33%;">
+      <ion-col>Amount: {{cardDetails.amount}}</ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col>Organization: {{cardDetails.org}}</ion-col>
+    </ion-row>
+    <ion-row center>
+        <ion-col text-center>
+          <ion-button color="dark">Scan</ion-button>
+        </ion-col>
+    </ion-row>
+   
+  </ion-grid>
+  
 </ion-content>
