@@ -1,0 +1,62 @@
+      <ion-grid *ngIf="!successfulScan">
+          <ion-item-divider>
+            <ion-row>
+              <ion-col>
+                  <img src="../../../assets/img/barcode-dummy-img.png">
+              </ion-col>
+            </ion-row>
+          </ion-item-divider>
+        <ion-row *ngIf="scanTries<=3">
+            <ion-col >
+                <ion-button color="dark ion-activatable" (click)="scanCode()">
+                    {{scanTries==0 ? 'Scan Card' : 'Retry'}}
+                    <ion-ripple-effect></ion-ripple-effect>
+                </ion-button>
+            </ion-col>
+           
+          </ion-row>
+          <ion-row *ngIf="scanTries>3">
+            
+            <ion-col>
+                
+                <ion-list >
+                    <ion-item>
+                      <ion-label floating>Bar Code Number</ion-label>
+                      <ion-input [(ngModel)]="barCodeValue"  type="text"></ion-input>
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="scanTries>3">
+            <ion-col>
+                <ion-button color="dark" (click)="handleManualCardNumber()">
+                    Submit
+                </ion-button>
+            </ion-col>
+          </ion-row>
+      </ion-grid>
+      <ion-grid *ngIf="successfulScan">
+        <ion-row>
+          <ion-col text-right>
+              <ion-icon name="close-circle" (click)="handleBarCodeClose()">
+                  <ion-ripple-effect></ion-ripple-effect>
+              </ion-icon>
+              
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ngx-barcode [bc-value]="barCodeValue" [bc-display-value]="successfulScan"></ngx-barcode>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+ 
+  <div *ngIf="scannedData">
+    <p>
+      Scanned Code Text : <b>{{ scannedData["text"] }}</b>
+    </p>
+    <p>
+      Scanned Code Format : <b>{{ scannedData["format"] }}</b>
+    </p>
+  </div>
+ 

@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { CaptureCardPage } from './capture-card.page';
+import { BarCodeComponentModule } from '../../components/bar-code/bar-code.component.module';
+import { CompanyDetailsComponentModule } from '../../components/company-details/company-details.component.module';
 
 const routes: Routes = [
   {
@@ -19,7 +21,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    BarCodeComponentModule,
+    CompanyDetailsComponentModule
   ],
   declarations: [CaptureCardPage]
 })

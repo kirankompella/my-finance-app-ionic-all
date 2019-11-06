@@ -14,6 +14,8 @@ import { environment } from '../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { Camera } from '@ionic-native/camera/ngx';
 import { HttpModule } from '@angular/http';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { NgxBarcodeModule } from 'ngx-barcode';
 
 @NgModule({
   imports: [
@@ -26,10 +28,11 @@ import { HttpModule } from '@angular/http';
     IonicStorageModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production
-    })
+    }),
+    NgxBarcodeModule
   ],
   declarations: [AppComponent],
-  providers: [InAppBrowser, SplashScreen, StatusBar,Camera],
+  providers: [InAppBrowser, SplashScreen, StatusBar,Camera,BarcodeScanner],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -1,23 +1,21 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Scan Card</ion-title>
+    <ion-title>Add Card</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-grid >
-    <ion-row style="height: 33%;">
-      <ion-col>Amount: {{cardDetails.amount}}</ion-col>
-    </ion-row>
-    <ion-row>
-        <ion-col>Organization: {{cardDetails.org}}</ion-col>
-    </ion-row>
     <ion-row center>
+      <ion-col text-center>
+          <bar-code></bar-code>
+      </ion-col>
+    </ion-row>
+    <ion-row center *ngIf="showCompanyDetails">
         <ion-col text-center>
-          <ion-button color="dark">Scan</ion-button>
+          <company-details></company-details>
         </ion-col>
     </ion-row>
-   
   </ion-grid>
   
 </ion-content>
