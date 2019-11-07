@@ -4,6 +4,7 @@ import { Card } from '../../models/card';
 import { CameraCaptureService } from '../../providers/camera-capture.service';
 import { LoadingController } from '@ionic/angular';
 import { ImageVisionService } from '../../providers/image-vision.service';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'company-details',
@@ -12,6 +13,7 @@ import { ImageVisionService } from '../../providers/image-vision.service';
 })
 export class CompanyDetailsComponent implements OnInit {
 
+  logoScanned : boolean = false;
  
   cardDetails: Card = {
     amount:0,
@@ -39,6 +41,9 @@ export class CompanyDetailsComponent implements OnInit {
       this.vision.getLabels(imageData).subscribe(async (result) => {
         console.log(result.json());
         this.processVisionResult(result.json());
+        this.vision.getLogo(this.cardDetails.company.org).subscribe(async(result)=>{
+          this.getLogoUrl(result.json());
+        })
         this.loading.dismiss();
       }, err => {
         console.log("error occurred in processing image");
@@ -49,7 +54,20 @@ export class CompanyDetailsComponent implements OnInit {
     });
   }
 
+  getLogoUrl(searchResults:JSON){
+    debugger;
+    let searchItems = searchResults["items"];
+    this.cardDetails.company.logoUrl = searchItems[0]["cse_image"][0]["src"];
+    for(let i=0;i<searchItems.length;i++){
+        let url = searchItems[i]["cse_image"][0]["src"];
+        if(url.includes("logo")){
+          this.cardDetails.company.logoUrl = url;
+        }
+    }
+  }
+
   processVisionResult(result: { responses: any[]; }){
+    debugger;
       if(result!=null && result.responses != null && result.responses.length > 0){
         let response = result.responses[0];
         if(response.logoAnnotations != null && response.logoAnnotations.length > 0){
@@ -60,6 +78,9 @@ export class CompanyDetailsComponent implements OnInit {
 
   handleScanClick(evt: any){
     this.captureImageAndProcess();
+  }
+  handleDoneClick(evt:any){
+      alert("card details captured: "+JSON.stringify(this.cardDetails))
   }
 
   async presentLoading() {

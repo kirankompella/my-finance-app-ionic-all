@@ -15,10 +15,23 @@ import {CompanyDetailsComponent} from "../../components/company-details/company-
 export class CaptureCardPage implements OnInit {
 
   public showCompanyDetails =false;
+  cardIdentifierData = {};
+
   constructor(){
 
   }
   ngOnInit(): void{
     
+  }
+
+  get updateBarCodeResultFunc(){
+    return this.updateBarCodeResult.bind(this);
+  }
+
+  updateBarCodeResult(scannedData:any){
+    this.cardIdentifierData["barCodeData"] = scannedData;
+    console.log("canned Data: "+ JSON.stringify(scannedData));
+    alert("Final Bar code Data: "+JSON.stringify(scannedData));
+    this.showCompanyDetails = true;
   }
 }

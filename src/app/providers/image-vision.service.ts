@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-//import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +34,17 @@ export class ImageVisionService {
                   ]
                 }
 //console.log("environment.googleCloudVisionAPIKey: "+environment.googleCloudVisionAPIKey )
-return this.http.post('https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCs6-yRMGVrKliZ082dyClpSwwdE22hiLg', body);
-}}
+debugger;
+return this.http.post(environment.googleCloudVisionAPIKey , body);
+}
+
+getLogo(companyName:string){
+  debugger
+  return this.http.get(environment.googleSearchAPI+encodeURI(companyName)+"%20logo");
+  
+}
+
+
+}
+
+
