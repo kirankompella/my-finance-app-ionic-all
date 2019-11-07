@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Company } from '../../models/company';
 import { Card } from '../../models/card';
 import { CameraCaptureService } from '../../providers/camera-capture.service';
@@ -13,13 +13,12 @@ import { async } from '@angular/core/testing';
 })
 export class CompanyDetailsComponent implements OnInit {
 
+  @Input() updateCompanyDetails: Function;
   logoScanned : boolean = false;
+
+  company:Company = new Company()
  
-  cardDetails: Card = {
-    amount:0,
-    barCodeNo: 0,
-    company: new Company()
-  }
+  
 
   loading = null;
 
@@ -34,6 +33,10 @@ export class CompanyDetailsComponent implements OnInit {
 
 
   private captureImageAndProcess() {
+    /*this.vision.getLogo("quick trip").subscribe(async(result)=>{
+      this.getLogoUrl(result.json());
+      this.logoScanned = true;
+    });*/
     this.capture.capture().then((imageData) => {
       this.presentLoading();
       console.log(imageData);
@@ -41,9 +44,12 @@ export class CompanyDetailsComponent implements OnInit {
       this.vision.getLabels(imageData).subscribe(async (result) => {
         console.log(result.json());
         this.processVisionResult(result.json());
-        this.vision.getLogo(this.cardDetails.company.org).subscribe(async(result)=>{
+        this.vision.getLogo(this.company.org).subscribe(async(result)=>{
+          
+          console.log(result.json())
           this.getLogoUrl(result.json());
-        })
+          this.logoScanned = true;
+        });
         this.loading.dismiss();
       }, err => {
         console.log("error occurred in processing image");
@@ -57,13 +63,23 @@ export class CompanyDetailsComponent implements OnInit {
   getLogoUrl(searchResults:JSON){
     debugger;
     let searchItems = searchResults["items"];
-    this.cardDetails.company.logoUrl = searchItems[0]["cse_image"][0]["src"];
-    for(let i=0;i<searchItems.length;i++){
-        let url = searchItems[i]["cse_image"][0]["src"];
-        if(url.includes("logo")){
-          this.cardDetails.company.logoUrl = url;
+    if(searchItems[0].pagemap.organization!= null && searchItems[0].pagemap.organization.length>0 && searchItems[0].pagemap.organization[0].logo!=null){
+      this.company.logoUrl = searchItems[0].pagemap.organization[0].logo;
+    }else{
+      this.company.logoUrl = searchItems[0].pagemap["cse_image"][0]["src"];
+      for(let i=0;i<searchItems.length;i++){
+        try{
+          let url = searchItems[i].pagemap["cse_image"][0]["src"];
+          if(url.includes("logo")){
+            this.company.logoUrl = url;
+          }
+        }catch(err){
+          console.log(err);
         }
+      }
     }
+    
+    
   }
 
   processVisionResult(result: { responses: any[]; }){
@@ -71,7 +87,8 @@ export class CompanyDetailsComponent implements OnInit {
       if(result!=null && result.responses != null && result.responses.length > 0){
         let response = result.responses[0];
         if(response.logoAnnotations != null && response.logoAnnotations.length > 0){
-          this.cardDetails.company.org = response.logoAnnotations[0].description;
+          alert("company name: "+response.logoAnnotations[0].description);
+          this.company.org = response.logoAnnotations[0].description;
         }
       } 
   }
@@ -79,9 +96,7 @@ export class CompanyDetailsComponent implements OnInit {
   handleScanClick(evt: any){
     this.captureImageAndProcess();
   }
-  handleDoneClick(evt:any){
-      alert("card details captured: "+JSON.stringify(this.cardDetails))
-  }
+  
 
   async presentLoading() {
      this.loading = await this.loadingController.create({

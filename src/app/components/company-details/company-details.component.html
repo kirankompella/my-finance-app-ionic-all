@@ -15,17 +15,13 @@
 <ion-grid *ngIf="logoScanned">
         <ion-row>
                 <ion-col>
-                    <div><img src="this.cardDetails.company.logoUrl"/></div>
+                    <div><img src="{{company.logoUrl}}"/></div>
                 </ion-col>
             </ion-row>
     <ion-row>
         <ion-col>
-            <div>Voucher from: {{cardDetails.company.org}}</div>
+            <div>Voucher from: {{company.org}}</div>
         </ion-col>
     </ion-row>
-    <ion-row>
-        <ion-col>
-                <ion-button color="dark" (click)='handleDoneClick($event)'>Done</ion-button>
-        </ion-col>
-    </ion-row>
+   
 </ion-grid>

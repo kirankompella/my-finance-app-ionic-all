@@ -34,12 +34,10 @@ export class ImageVisionService {
                   ]
                 }
 //console.log("environment.googleCloudVisionAPIKey: "+environment.googleCloudVisionAPIKey )
-debugger;
 return this.http.post(environment.googleCloudVisionAPIKey , body);
 }
 
 getLogo(companyName:string){
-  debugger
   return this.http.get(environment.googleSearchAPI+encodeURI(companyName)+"%20logo");
   
 }

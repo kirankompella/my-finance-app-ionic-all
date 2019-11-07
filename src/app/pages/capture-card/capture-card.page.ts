@@ -6,6 +6,7 @@ import { Card } from "../../models/card";
 import { BarCodeComponent} from "../../components/bar-code/bar-code.component";
 import { Company } from '../../models/company';
 import {CompanyDetailsComponent} from "../../components/company-details/company-details.component";
+import { BarCode } from '../../models/barcode';
 
 @Component({
   selector: 'capture-card',
@@ -15,7 +16,10 @@ import {CompanyDetailsComponent} from "../../components/company-details/company-
 export class CaptureCardPage implements OnInit {
 
   public showCompanyDetails =false;
-  cardIdentifierData = {};
+  cardDetails: Card = {
+    barCode: new BarCode(),
+    company: new Company()
+  }
 
   constructor(){
 
@@ -28,10 +32,23 @@ export class CaptureCardPage implements OnInit {
     return this.updateBarCodeResult.bind(this);
   }
 
+  get updateCompanyDetailsFunc(){
+    return this.updateCompanyDetails.bind(this);
+  }
+
   updateBarCodeResult(scannedData:any){
-    this.cardIdentifierData["barCodeData"] = scannedData;
-    console.log("canned Data: "+ JSON.stringify(scannedData));
+    this.cardDetails.barCode = scannedData;
+    console.log("scanned Data: "+ JSON.stringify(scannedData));
     alert("Final Bar code Data: "+JSON.stringify(scannedData));
     this.showCompanyDetails = true;
   }
+  updateCompanyDetails(companyDetails:any){
+    this.cardDetails.company= companyDetails;
+  }
+
+  handleDoneClick(evt:any){
+    alert("card details captured: "+JSON.stringify(this.cardDetails));
+  }
 }
+
+
