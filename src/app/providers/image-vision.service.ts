@@ -34,11 +34,14 @@ export class ImageVisionService {
                   ]
                 }
 //console.log("environment.googleCloudVisionAPIKey: "+environment.googleCloudVisionAPIKey )
-return this.http.post(environment.googleCloudVisionAPIKey , body);
+//return this.http.post(environment.googleCloudVisionAPIKey , body);
+return this.http.post("https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCs6-yRMGVrKliZ082dyClpSwwdE22hiLg" , body);
+
 }
 
 getLogo(companyName:string){
-  return this.http.get(environment.googleSearchAPI+encodeURI(companyName)+"%20logo");
+  //return this.http.get(environment.googleSearchAPI+encodeURI(companyName)+"%20logo");
+  return this.http.get("https://www.googleapis.com/customsearch/v1?key=AIzaSyD6rT3yzndawuwb0y2WdrcbfkTrLhG_4c8&cx=009024791238972097032:zxk5rtsl18g&q="+encodeURI(companyName)+"%20logo");
   
 }
 
