@@ -48,6 +48,7 @@ export class CompanyDetailsComponent implements OnInit {
           
           console.log(result.json())
           this.getLogoUrl(result.json());
+          this.updateCompanyDetails(this.company);
           this.logoScanned = true;
         });
         this.loading.dismiss();
