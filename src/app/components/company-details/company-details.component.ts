@@ -37,6 +37,7 @@ export class CompanyDetailsComponent implements OnInit {
       this.getLogoUrl(result.json());
       this.logoScanned = true;
     });*/
+    this.updateCompanyDetails(this.company);
     this.capture.capture().then((imageData) => {
       this.presentLoading();
       console.log(imageData);
@@ -55,9 +56,13 @@ export class CompanyDetailsComponent implements OnInit {
       }, err => {
         console.log("error occurred in processing image");
         console.log(err);
+        this.updateCompanyDetails(null);
+        this.company = null;
       });
     }, (err) => {
       console.log("error occurred in capturing image");
+      this.updateCompanyDetails(null);
+      this.company = null;
     });
   }
 

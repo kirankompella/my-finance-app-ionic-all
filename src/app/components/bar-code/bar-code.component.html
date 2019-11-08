@@ -1,11 +1,9 @@
       <ion-grid *ngIf="!successfulScan">
-          <ion-item-divider>
-            <ion-row>
+            <ion-row >
               <ion-col>
                   <img src="../../../assets/img/barcode-dummy-img.png">
               </ion-col>
             </ion-row>
-          </ion-item-divider>
         <ion-row *ngIf="scanTries<=3">
             <ion-col >
                 <ion-button color="dark ion-activatable" (click)="scanCode()">

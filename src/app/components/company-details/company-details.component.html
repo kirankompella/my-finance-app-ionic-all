@@ -1,27 +1,27 @@
 <ion-grid *ngIf="!logoScanned">
-    <ion-item-divider>
-        <ion-row text-center>
-            <ion-col>
-                <img src="../../../assets/img/hand-card-picture.jpg"/>
-            </ion-col>
-        </ion-row>
-    </ion-item-divider>
+
     <ion-row text-center>
-        <ion-col  >
-                <ion-button color="dark" (click)='handleScanClick($event)'>Scan</ion-button>
+        <ion-col>
+            <img src="../../../assets/img/hand-card-picture.jpg" />
+        </ion-col>
+    </ion-row>
+
+    <ion-row text-center>
+        <ion-col>
+            <ion-button color="dark" (click)='handleScanClick($event)'>Scan</ion-button>
         </ion-col>
     </ion-row>
 </ion-grid>
 <ion-grid *ngIf="logoScanned">
-        <ion-row>
-                <ion-col>
-                    <div><img src="{{company.logoUrl}}"/></div>
-                </ion-col>
-            </ion-row>
+    <ion-row>
+        <ion-col>
+            <div><img src="{{company.logoUrl}}" /></div>
+        </ion-col>
+    </ion-row>
     <ion-row>
         <ion-col>
             <div>Voucher from: {{company.org}}</div>
         </ion-col>
     </ion-row>
-   
+
 </ion-grid>

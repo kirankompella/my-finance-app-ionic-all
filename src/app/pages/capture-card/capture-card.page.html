@@ -16,10 +16,10 @@
     </ion-row>
     <ion-row center *ngIf="showCompanyDetails">
         <ion-col text-center>
-          <company-details ></company-details>
+          <company-details [updateCompanyDetails]="updateCompanyDetailsFunc"></company-details>
         </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row *ngIf="receivedCardDetails">
         <ion-col>
                 <ion-button color="dark" (click)='handleDoneClick($event)'>Done</ion-button>
         </ion-col>

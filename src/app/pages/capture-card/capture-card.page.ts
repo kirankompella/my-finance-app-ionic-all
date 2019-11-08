@@ -16,9 +16,10 @@ import { BarCode } from '../../models/barcode';
 export class CaptureCardPage implements OnInit {
 
   public showCompanyDetails =false;
+  receivedCardDetails: boolean =false;
   cardDetails: Card = {
-    barCode: new BarCode(),
-    company: new Company()
+    barCode: null,
+    company: null
   }
 
   constructor(){
@@ -34,6 +35,7 @@ export class CaptureCardPage implements OnInit {
 
   get updateCompanyDetailsFunc(){
     return this.updateCompanyDetails.bind(this);
+    
   }
 
   updateBarCodeResult(scannedData:any){
@@ -41,9 +43,16 @@ export class CaptureCardPage implements OnInit {
     console.log("scanned Data: "+ JSON.stringify(scannedData));
     alert("Final Bar code Data: "+JSON.stringify(scannedData));
     this.showCompanyDetails = true;
+    if(this.cardDetails.company!=null && this.cardDetails.barCode!=null){
+      this.receivedCardDetails = true;
+    }
   }
   updateCompanyDetails(companyDetails:any){
     this.cardDetails.company= companyDetails;
+    if(this.cardDetails.company!=null && this.cardDetails.barCode!=null){
+      this.receivedCardDetails = true;
+      alert(JSON.stringify(this.cardDetails));  
+    }
   }
 
   handleDoneClick(evt:any){
