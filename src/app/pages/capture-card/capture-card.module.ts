@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { CaptureCardPage } from './capture-card.page';
 import { BarCodeComponentModule } from '../../components/bar-code/bar-code.component.module';
 import { CompanyDetailsComponentModule } from '../../components/company-details/company-details.component.module';
+import { NetworkCaptureService } from '../../providers/network-connection.service';
 
 const routes: Routes = [
   {
@@ -25,6 +26,7 @@ const routes: Routes = [
     BarCodeComponentModule,
     CompanyDetailsComponentModule
   ],
-  declarations: [CaptureCardPage]
+  declarations: [CaptureCardPage],
+  providers:[NetworkCaptureService]
 })
 export class CaptureCardPageModule {}

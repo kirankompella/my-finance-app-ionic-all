@@ -1,4 +1,5 @@
       <ion-grid *ngIf="!successfulScan">
+          
             <ion-row >
               <ion-col>
                   <img src="../../../assets/img/barcode-dummy-img.png">
@@ -7,23 +8,23 @@
         <ion-row *ngIf="scanTries<=3">
             <ion-col >
                 <ion-button color="dark ion-activatable" (click)="scanCode()">
-                    {{scanTries==0 ? 'Scan Card' : 'Retry'}}
+                    {{scanTries==0 ? 'Scan Bar/Qr Code' : 'Retry'}}
                     <ion-ripple-effect></ion-ripple-effect>
                 </ion-button>
             </ion-col>
            
           </ion-row>
-          <ion-row *ngIf="scanTries>3">
+          <ion-row >
             <ion-col>
                 <ion-list >
                     <ion-item>
-                      <ion-label floating>Bar Code Number</ion-label>
-                      <ion-input [(ngModel)]="barCodeValue"  type="text"></ion-input>
+                      <ion-label floating>Card Number</ion-label>
+                      <ion-input [(ngModel)]="scannedData.text"  type="text"></ion-input>
                     </ion-item>
                 </ion-list>
             </ion-col>
           </ion-row>
-          <ion-row *ngIf="scanTries>3">
+          <ion-row *ngIf="scannedData.text !=''">
             <ion-col>
                 <ion-button color="dark" (click)="handleManualCardNumber()">
                     Submit
@@ -42,7 +43,7 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ngx-barcode [bc-value]="barCodeValue" [bc-display-value]="successfulScan"></ngx-barcode>
+            <ngx-barcode [bc-value]="scannedData.text" [bc-display-value]="successfulScan"></ngx-barcode>
           </ion-col>
         </ion-row>
       </ion-grid>

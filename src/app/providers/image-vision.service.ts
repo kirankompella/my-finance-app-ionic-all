@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, RequestOptions } from '@angular/http';
 import { environment } from '../../environments/environment';
+import * as $ from 'jquery';
 
 @Injectable({
   providedIn: 'root'
@@ -41,10 +42,9 @@ return this.http.post("https://vision.googleapis.com/v1/images:annotate?key=AIza
 
 getLogo(companyName:string){
   //return this.http.get(environment.googleSearchAPI+encodeURI(companyName)+"%20logo");
-  return this.http.get("https://www.googleapis.com/customsearch/v1?key=AIzaSyD6rT3yzndawuwb0y2WdrcbfkTrLhG_4c8&cx=009024791238972097032:zxk5rtsl18g&q="+encodeURI(companyName)+"%20logo");
+  return this.http.get("https://www.googleapis.com/customsearch/v1?key=AIzaSyD6rT3yzndawuwb0y2WdrcbfkTrLhG_4c8&cx=009024791238972097032:zxk5rtsl18g&q=logo%20"+encodeURI(companyName)+"&searchType=image");
   
 }
-
 
 }
 

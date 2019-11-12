@@ -15,18 +15,15 @@ import { BarCodeData } from '../../interfaces/bar-code-data';
 export class BarCodeComponent implements OnInit {
 
   encodeData: any;
-  scannedData : BarCodeData= {text:"",format:"",cancelled:true} 
-  barcodeScannerOptions: BarcodeScannerOptions;
-  public scanTries: number;
-  successfulScan: boolean;
-  barCodeValue: string;
+  @Input() scannedData : BarCodeData;
   @Input() updateBarCodeResult: Function;
+  barcodeScannerOptions: BarcodeScannerOptions;
+  public scanTries: number = 0;
+  successfulScan: boolean = false;
+  
  
+
   constructor(private barcodeScanner: BarcodeScanner) {
-    this.scanTries =0;
-    this.successfulScan = false;
-    //this.barCodeValue = 036000291452;
-    //Options
     this.barcodeScannerOptions = {
       showTorchButton: true,
       showFlipCameraButton: true
@@ -41,11 +38,9 @@ export class BarCodeComponent implements OnInit {
       .scan()
       .then(barcodeData => {
         alert("Barcode data " + JSON.stringify(barcodeData));
-        console.log("Barcode data " + JSON.stringify(barcodeData));
         this.scannedData = barcodeData;
         if(this.scannedData!=null && this.scannedData["text"].length > 0 && !this.scannedData["cancelled"]){
           this.successfulScan = true;
-          this.barCodeValue = this.scannedData["text"];
           this.updateBarCodeResult(this.scannedData);
         }else{
           this.successfulScan = false;
@@ -62,18 +57,17 @@ export class BarCodeComponent implements OnInit {
   handleManualCardNumber(){
     //todo: validate input
     //this.scannedData["format"] = "Mannual Entry";
+    alert(this.scannedData.text);
     this.successfulScan = true;
-    this.scannedData.text = this.barCodeValue;
     this.scannedData.cancelled = false;
     this.updateBarCodeResult(this.scannedData);
   }
 
   handleBarCodeClose(){
     this.successfulScan = false;
-    this.barCodeValue = "";
     this.scanTries = 0;
     this.scannedData = {text:"",format:"",cancelled:true};
     this.updateBarCodeResult(this.scannedData);
   }
- 
+
 }
