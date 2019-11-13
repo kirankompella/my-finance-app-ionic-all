@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Company } from '../../models/company';
 import { Card } from '../../models/card';
 import { CameraCaptureService } from '../../providers/camera-capture.service';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController,AlertController } from '@ionic/angular';
 import { ImageVisionService } from '../../providers/image-vision.service';
 import { async } from '@angular/core/testing';
+import { NetworkCaptureService } from '../../providers/network-connection.service';
 
 @Component({
   selector: 'company-details',
@@ -16,15 +17,16 @@ export class CompanyDetailsComponent implements OnInit {
   @Input() updateCompanyDetails: Function;
   logoScanned : boolean = false;
 
-  
- 
-  
-
   loading = null;
 
   constructor(private capture:CameraCaptureService,
     public loadingController: LoadingController,
-    private vision: ImageVisionService) { }
+    private vision: ImageVisionService,
+    private networkCaptureService:NetworkCaptureService,
+    public alertController: AlertController) {
+
+     }
+
 
   ngOnInit() {
     console.log("scan card init called");
@@ -32,17 +34,49 @@ export class CompanyDetailsComponent implements OnInit {
   }
 
 
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      header: 'You are offline!',
+      message: 'Please Connect to Internet.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('User wants to be offline');
+            return;
+          }
+        }, {
+          text: 'Connect',
+          handler: () => {
+            console.log('connecting to wifi..');
+            this.networkCaptureService.connectToNetwork();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
   private captureImageAndProcess() {
+    
+    
+
+
     
     /*
     this.vision.getLogo("heritage fresh").subscribe(async(result)=>{
       this.company.logoUrl = this.getLogoUrlFromImageSearch(result.json());
       alert(this.company.logoUrl);
       this.logoScanned = true;
-    });*/
+    });
+    this.updateCompanyDetails(this.company);
+    */
 
     
-    this.updateCompanyDetails(this.company);
+    
     this.capture.capture().then((imageData) => {
       this.presentLoading();
       console.log(imageData);
@@ -125,8 +159,15 @@ export class CompanyDetailsComponent implements OnInit {
       } 
   }
 
-  handleScanClick(evt: any){
-    this.captureImageAndProcess();
+  async handleScanClick(evt: any){
+    if(!this.networkCaptureService.connectionStatus)
+    {
+      await this.presentAlertConfirm();
+    }else{
+      this.captureImageAndProcess();
+    }
+   
+   
   }
   
 

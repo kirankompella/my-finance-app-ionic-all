@@ -1,60 +1,40 @@
 import { Network } from '@ionic-native/network/ngx';
-import { platform } from 'os';
-import { Platform } from '@ionic/angular';
+import { Platform,Events } from '@ionic/angular';
+import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
 
 
 export class NetworkCaptureService{
-
+public connectionStatus: boolean = false;
 disconnectSubscription:any;
 connectSubscription:any;
 
-constructor(private network: Network,private platform: Platform) { 
-    platform.ready().then(action=>{
-        alert('platform ready');
-        this.startConnectionSubscribe();
-        this.startDisconnectionSubscribe();
+constructor(private network: Network,
+  private platform: Platform,
+  private openNativeSettings: OpenNativeSettings) { 
+        platform.ready().then(action=>{
+        this.subscribeToNetworkEvents();
+        document.addEventListener("offline", this.onOffline, false);
+        document.addEventListener("online", this.onOnline, false);
     });
     
 }
-
-
-startDisconnectionSubscribe(){
-    // watch network for a disconnection
- this.disconnectSubscription = this.network.onDisconnect().subscribe(() => {
-    console.log('network was disconnected :-(');
-  });
+onOffline(){
+  this.connectionStatus = false;
 }
-
-stopDisconnectionSubscribe(){
-// stop disconnect watch
-this.disconnectSubscription.unsubscribe();
+onOnline(){
+  this.connectionStatus = true;
 }
+subscribeToNetworkEvents():void{
+  alert('platform ready network status: '+this.network.type);
+  this.connectionStatus = this.network.type == 'none'?false:true;
+  }
+connectToNetwork(){
+  alert('connecting to wifi');
+  this.openNativeSettings.open("settings");
 
-startConnectionSubscribe(){
-    // watch network for a disconnection
- // watch network for a connection
- this.connectSubscription = this.network.onConnect().subscribe(() => {
-    alert("yay connected");
-    // We just got a connection but we need to wait briefly
-     // before we determine the connection type. Might need to wait.
-    // prior to doing any api requests as well.
-    setTimeout(() => {
-      if (this.network.type === 'wifi') {
-        console.log('we got a wifi connection, woohoo!');
-      }
-    }, 3000);
-  });
+}
   
 }
-
-stopConnectionSubscribe(){
-
-    // stop connect watch
-    this.connectSubscription.unsubscribe();
-
-    }
-}
-
 
 
 

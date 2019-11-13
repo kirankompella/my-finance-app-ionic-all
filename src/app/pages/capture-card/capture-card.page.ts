@@ -17,7 +17,7 @@ import { NetworkCaptureService } from '../../providers/network-connection.servic
   templateUrl: './capture-card.page.html',
   styleUrls: ['./capture-card.page.scss'],
 })
-export class CaptureCardPage implements OnInit,OnDestroy {
+export class CaptureCardPage  {
   
 
   public showCompanyDetails =false;
@@ -28,20 +28,13 @@ export class CaptureCardPage implements OnInit,OnDestroy {
   showScanner: boolean = false;
   uniqueId:UniqueDeviceID;
 
-  constructor(private uniqueDeviceID: UniqueDeviceID,private sim: Sim,private networkCaptureService:NetworkCaptureService){
+  constructor(private uniqueDeviceID: UniqueDeviceID,private sim: Sim){
     this.cardDetails= {
       barCode: this.scannedData,
       company: this.company
     }
     this.uniqueId = uniqueDeviceID;
-   
-   
-    
 }
-  ngOnInit(): void{
-    this.networkCaptureService.startConnectionSubscribe();
-    this.networkCaptureService.startDisconnectionSubscribe();
-  }
 
     
 
@@ -101,10 +94,6 @@ export class CaptureCardPage implements OnInit,OnDestroy {
     this.showCompanyDetails = true;
   }
 
-  ngOnDestroy(): void {
-    this.networkCaptureService.stopConnectionSubscribe();
-    this.networkCaptureService.stopDisconnectionSubscribe();
-  }
 }
 
 
