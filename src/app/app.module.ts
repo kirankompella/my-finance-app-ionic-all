@@ -20,6 +20,7 @@ import { UniqueDeviceID } from '@ionic-native/unique-device-id/ngx';
 import { Sim } from '@ionic-native/sim/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   imports: [
@@ -36,7 +37,7 @@ import { OpenNativeSettings } from '@ionic-native/open-native-settings/ngx';
     NgxBarcodeModule
   ],
   declarations: [AppComponent],
-  providers: [InAppBrowser, SplashScreen, StatusBar,Camera,BarcodeScanner,UniqueDeviceID,Sim,Network,OpenNativeSettings],
+  providers: [InAppBrowser, SplashScreen, StatusBar,Camera,BarcodeScanner,UniqueDeviceID,Sim,Network,OpenNativeSettings,Geolocation],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -19,9 +19,11 @@ constructor(private network: Network,
     
 }
 onOffline(){
+  alert("i am offline now");
   this.connectionStatus = false;
 }
 onOnline(){
+  alert("i am online now");
   this.connectionStatus = true;
 }
 subscribeToNetworkEvents():void{
@@ -29,7 +31,6 @@ subscribeToNetworkEvents():void{
   this.connectionStatus = this.network.type == 'none'?false:true;
   }
 connectToNetwork(){
-  alert('connecting to wifi');
   this.openNativeSettings.open("settings");
 
 }

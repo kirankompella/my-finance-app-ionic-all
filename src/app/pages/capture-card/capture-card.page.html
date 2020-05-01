@@ -18,7 +18,7 @@
           <company-details [(company)] = "company" [updateCompanyDetails]="updateCompanyDetailsFunc"></company-details>
         </ion-col>
     </ion-row>
-    <ion-row center *ngIf="scannedData.text!='' && company.org!=''">
+    <ion-row center *ngIf="cardDetails.barCode.text!='' && cardDetails.company.org!=''">
         <ion-col text-center>
                 <ion-button color="dark" (click)='handleDoneClick($event)'>Done</ion-button>
         </ion-col>

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CameraCaptureService } from '../../providers/camera-capture.service';
+import { Storage } from '@ionic/storage';
 import { LoadingController } from '@ionic/angular';
 import { ImageVisionService } from "../../providers/image-vision.service";
 import { Card } from "../../models/card";
@@ -11,6 +11,8 @@ import { BarCodeData } from '../../interfaces/bar-code-data';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id/ngx';
 import { Sim } from '@ionic-native/sim/ngx';
 import { NetworkCaptureService } from '../../providers/network-connection.service';
+import {  FinalObj } from '../../models/finalObj';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'capture-card',
@@ -27,13 +29,34 @@ export class CaptureCardPage  {
   cardDetails: Card;
   showScanner: boolean = false;
   uniqueId:UniqueDeviceID;
-
-  constructor(private uniqueDeviceID: UniqueDeviceID,private sim: Sim){
+  user:User;
+  
+  constructor(private uniqueDeviceID: UniqueDeviceID,private sim: Sim,private storage: Storage){
     this.cardDetails= {
       barCode: this.scannedData,
-      company: this.company
+      company: this.company,
+      isDeleted: false,
+      isSynched: false,
+      cardId : ""
+    };
+    if(this.storage.keys.length ===0){
+    this.user = new User();
+    try{
+    uniqueDeviceID.get()
+      .then((uuid: any) => {
+        this.user.deviceId = uuid;
+      })
+      .catch((error: any) => console.log(error));
+
+      this.sim.getSimInfo().then(
+        (info) => (this.user.simInfo=info),
+        (err) => console.log('Unable to get sim info: ', err)
+      );
+    }catch(err){
+      console.log(err);
     }
-    this.uniqueId = uniqueDeviceID;
+  }
+
 }
 
     
@@ -48,6 +71,7 @@ export class CaptureCardPage  {
   }
 
   updateBarCodeResult(scannedData:any){
+    alert("scanned data after update :" +JSON.stringify(scannedData));
     this.cardDetails.barCode = scannedData;
     console.log("scanned Data: "+ JSON.stringify(scannedData));
     alert("Final Bar code Data: "+JSON.stringify(scannedData));
@@ -66,19 +90,30 @@ export class CaptureCardPage  {
 
   handleDoneClick(evt:any){
     alert("card details captured: "+JSON.stringify(this.cardDetails));
-    try{
-      this.uniqueId.get()
-      .then((uuid: any) => alert("whoohoo device id"+uuid))
-      .catch((error: any) => console.log(error));
-    }catch(err){
-      console.log(err);
+
+    if(this.storage.keys.length ===0){
+      let finalObj = new FinalObj();
+      finalObj.user = this.user;
+      finalObj.user.isSynched = false;
+      finalObj.user.active = true;
+      this.cardDetails.isSynched = false;
+      this.cardDetails.isDeleted = false;
+      this.cardDetails.cardId = this.user.deviceId+'_1';
+      finalObj.cards = [this.cardDetails];
+      //finalObj.cards.push(this.cardDetails);
+      this.storage["appData"] =  finalObj;
+      alert("final details captured: "+JSON.stringify(finalObj));
+    }else{
+      let finalObj = this.storage.get("appData");
+      this.cardDetails.isSynched = false;
+      this.cardDetails.isDeleted = false;
+      this.cardDetails.cardId = this.user.deviceId+'_'+finalObj["cards"].length+1;
+      finalObj["cards"].push(this.cardDetails);
+      alert("final details captured: "+JSON.stringify(finalObj));
     }
 
-    this.sim.getSimInfo().then(
-      
-      (info) => alert("Sim Info: "+JSON.stringify(info)),
-      (err) => console.log('Unable to get sim info: ', err)
-    );
+    
+    /*
     
     this.sim.hasReadPermission().then(
       (info) => alert("Has read permission Sim Info: "+JSON.stringify(info)),
@@ -87,7 +122,7 @@ export class CaptureCardPage  {
     this.sim.requestReadPermission().then(
       () => console.log('Permission granted'),
       () => console.log('Permission denied')
-    );
+    );*/
   }
 
   showScannerOptions(){

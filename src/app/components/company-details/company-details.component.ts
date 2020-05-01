@@ -6,6 +6,8 @@ import { LoadingController,AlertController } from '@ionic/angular';
 import { ImageVisionService } from '../../providers/image-vision.service';
 import { async } from '@angular/core/testing';
 import { NetworkCaptureService } from '../../providers/network-connection.service';
+import {LocationService} from '../../providers/location-service';
+import { Sim } from '@ionic-native/sim/ngx';
 
 @Component({
   selector: 'company-details',
@@ -23,7 +25,8 @@ export class CompanyDetailsComponent implements OnInit {
     public loadingController: LoadingController,
     private vision: ImageVisionService,
     private networkCaptureService:NetworkCaptureService,
-    public alertController: AlertController) {
+    public alertController: AlertController,
+    private sim:Sim) {
 
      }
 
@@ -60,7 +63,7 @@ export class CompanyDetailsComponent implements OnInit {
     await alert.present();
   }
 
-  private captureImageAndProcess() {
+  private captureImageAndProcess(countryCode:string) {
     
     
 
@@ -75,7 +78,7 @@ export class CompanyDetailsComponent implements OnInit {
     this.updateCompanyDetails(this.company);
     */
 
-    
+    alert("country code: "+countryCode);
     
     this.capture.capture().then((imageData) => {
       this.presentLoading();
@@ -84,7 +87,7 @@ export class CompanyDetailsComponent implements OnInit {
       this.vision.getLabels(imageData).subscribe(async (result) => {
         console.log(result.json());
         this.processVisionResult(result.json());
-        this.vision.getLogo(this.company.org).subscribe(async(result)=>{
+        this.vision.getLogo(this.company.org,countryCode).subscribe(async(result)=>{
           this.company.logoUrl = this.getLogoUrlFromImageSearch(result.json());
           this.updateCompanyDetails(this.company);
           this.logoScanned = true;
@@ -116,7 +119,7 @@ export class CompanyDetailsComponent implements OnInit {
   }
 
   getLogoUrl(searchResults:JSON,companyName:string){
-    debugger;
+
     let searchItems = searchResults["items"];
     if(searchItems[0].pagemap.organization!= null && searchItems[0].pagemap.organization.length>0 && searchItems[0].pagemap.organization[0].logo!=null){
       this.company.logoUrl = searchItems[0].pagemap.organization[0].logo;
@@ -160,16 +163,31 @@ export class CompanyDetailsComponent implements OnInit {
   }
 
   async handleScanClick(evt: any){
-    if(!this.networkCaptureService.connectionStatus)
+    debugger;
+    if(this.networkCaptureService.connectionStatus == false)
     {
       await this.presentAlertConfirm();
     }else{
-      this.captureImageAndProcess();
+      this.sim.getSimInfo().then(
+      
+        (info) => {
+          //evaluate getting contry code from location apix
+          alert("Sim Info: "+JSON.stringify(info))
+          return this.captureImageAndProcess(info["countryCode"]);
+        },
+        (err) => {
+          return this.captureImageAndProcess("us");
+          console.log('Unable to get sim info: ', err)
+        return 'IN';
+      }
+      );
+      
     }
    
    
   }
   
+ 
 
   async presentLoading() {
      this.loading = await this.loadingController.create({
