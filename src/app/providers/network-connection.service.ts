@@ -19,12 +19,14 @@ constructor(private network: Network,
     
 }
 onOffline(){
-  alert("i am offline now");
+
   this.connectionStatus = false;
+  alert("i am offline now" +this.connectionStatus );
 }
 onOnline(){
-  alert("i am online now");
+ 
   this.connectionStatus = true;
+  alert("i am online now"+this.connectionStatus );
 }
 subscribeToNetworkEvents():void{
   alert('platform ready network status: '+this.network.type);
